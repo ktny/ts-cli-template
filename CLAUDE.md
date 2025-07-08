@@ -7,6 +7,7 @@
 - **目的**: TypeScriptでCLIツールを素早く開発開始できるテンプレートの提供
 - **主要技術**: TypeScript, React Ink, Commander.js
 - **特徴**: インタラクティブなUI、npmパッケージ公開対応、モダンな開発環境
+- **Node.jsバージョン管理**: miseを使用（最新の安定版を推奨）
 
 ## 開発ガイドライン
 
@@ -54,6 +55,11 @@
 ## よく使うコマンド
 
 ```bash
+# Node.jsバージョン確認・設定
+mise list          # インストール済みバージョン一覧
+mise use node@latest  # 最新版を使用
+mise current       # 現在のバージョン確認
+
 # 開発
 npm run dev
 
@@ -77,6 +83,11 @@ npm run check-all
 
 ## トラブルシューティング
 
+### Node.jsバージョンの問題
+- `mise doctor`でmiseの状態を確認
+- `.mise.toml`が正しく設定されているか確認
+- `mise install node@latest`で最新版をインストール
+
 ### React Inkコンポーネントが表示されない
 - `render`関数でコンポーネントを正しくレンダリングしているか確認
 - 非同期処理の場合は`waitUntilExit`を使用
@@ -92,6 +103,7 @@ npm run check-all
 
 ## 参考リンク
 
+- [mise Documentation](https://mise.jdx.dev/)
 - [React Ink Documentation](https://github.com/vadimdemedes/ink)
 - [Commander.js Guide](https://github.com/tj/commander.js)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
