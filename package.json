@@ -1,5 +1,5 @@
 {
-  "name": "@username/ts-cli-template",
+  "name": "ts-cli-template",
   "version": "0.1.0",
   "description": "A modern TypeScript CLI tool template with React Ink",
   "main": "dist/index.js",
