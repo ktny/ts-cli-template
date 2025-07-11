@@ -1,32 +1,40 @@
 {
   "compilerOptions": {
-    "target": "ES2024",
-    "lib": ["ES2024"],
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "jsx": "react",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "removeComments": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
+    // === 出力設定 ===
+    "target": "ES2024",                        // 出力するJavaScriptのバージョン
+    "lib": ["ES2024"],                         // 利用可能なライブラリ（APIの型定義）
+    "module": "nodenext",                      // モジュールシステム（CommonJS/ESM自動判別）
+    "moduleResolution": "nodenext",            // モジュール解決方法（Node.js最新方式）
+    "jsx": "react",                            // JSX構文の処理方法
+    "outDir": "./dist",                        // 出力ディレクトリ
+    "rootDir": "./src",                        // ソースコードのルートディレクトリ
+
+    // === 型安全性設定 ===
+    "strict": true,                            // 厳格な型チェック（複数オプションの一括有効化）
+    "noUnusedLocals": true,                    // 未使用のローカル変数をエラーにする
+    "noUnusedParameters": true,                // 未使用の関数パラメータをエラーにする
+    "noImplicitReturns": true,                 // 関数の全パスで戻り値必須
+    "noFallthroughCasesInSwitch": true,        // switch文のfall-throughを防止
+
+    // === モジュール互換性設定 ===
+    "esModuleInterop": true,                   // CommonJSとESモジュールの相互運用を改善
+    "allowSyntheticDefaultImports": true,      // デフォルトエクスポートがないモジュールでも既定インポートを許可
+    "forceConsistentCasingInFileNames": true,  // ファイル名の大文字小文字を厳密にチェック
+    "resolveJsonModule": true,                 // JSONファイルのインポートを許可
+
+    // === 出力制御設定 ===
+    "declaration": true,                       // .d.tsファイル（型定義）を生成
+    "declarationMap": true,                    // .d.ts.mapファイルを生成
+    "sourceMap": true,                         // .mapファイル（デバッグ用）を生成
+    "removeComments": true,                    // コンパイル後にコメントを削除
+    "skipLibCheck": true,                      // ライブラリ型定義ファイルの型チェックをスキップ
+
+    // === パス解決設定 ===
+    "baseUrl": ".",                            // 相対パスの基準ディレクトリ
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"]                         // @/でsrcディレクトリを参照可能
     },
-    "types": ["node"]
+    "types": ["node"]                          // 追加で読み込む型定義パッケージ
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"]                      // コンパイル対象ファイル
 }
