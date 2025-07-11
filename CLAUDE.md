@@ -5,9 +5,10 @@
 ## プロジェクトの概要
 
 - **目的**: TypeScriptでCLIツールを素早く開発開始できるテンプレートの提供
-- **主要技術**: TypeScript, React Ink, Commander.js
+- **主要技術**: TypeScript (ES2024), React Ink, Commander.js
 - **特徴**: インタラクティブなUI、npmパッケージ公開対応、モダンな開発環境
-- **Node.jsバージョン管理**: miseを使用（最新の安定版を推奨）
+- **Node.jsバージョン管理**: miseを使用（Node.js 20.0.0以上必須）
+- **ECMAScript仕様**: ES2024（Object.groupBy(), Promise.withResolvers()等を利用可能）
 
 ## 開発ガイドライン
 
@@ -88,7 +89,8 @@ npm run check-all
 
 - `mise doctor`でmiseの状態を確認
 - `.mise.toml`が正しく設定されているか確認
-- `mise install node@latest`で最新版をインストール
+- `mise install node@20`以上でインストール（ES2024機能を使用するため）
+- `node -v`でバージョンが20.0.0以上であることを確認
 
 ### React Inkコンポーネントが表示されない
 

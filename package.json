@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/ktny/ts-cli-template#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "ink": "^5.0.1",
