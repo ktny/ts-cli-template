@@ -4,6 +4,16 @@
   "description": "A modern TypeScript CLI tool template with React Ink",
   "type": "module",
   "main": "dist/simple.js",
+  "bin": {
+    "ts-cli-template": "dist/simple.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/simple.js",
+      "types": "./dist/simple.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
