@@ -3,13 +3,9 @@
   "version": "0.1.0",
   "description": "A modern TypeScript CLI tool template with React Ink",
   "type": "module",
-  "main": "dist/index.js",
-  "bin": {
-    "ts-cli-template": "./bin/cli.js"
-  },
+  "main": "dist/simple.js",
   "files": [
-    "dist",
-    "bin"
+    "dist"
   ],
   "scripts": {
     "dev": "tsx --tsconfig tsxconfig.json src/simple.tsx",
