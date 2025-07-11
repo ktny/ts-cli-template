@@ -13,7 +13,7 @@ TypeScriptでCLIツールを開発するためのモダンなテンプレート�
 
 ## 必要な環境
 
-- Node.js（最新の安定版を推奨）
+- **Node.js 20.0.0以上**（ES2024機能を使用するため）
 - npm 9.0.0以上
 - [mise](https://mise.jdx.dev/)（Node.jsバージョン管理）
 
