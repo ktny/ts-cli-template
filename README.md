@@ -19,7 +19,53 @@ TypeScriptでCLIツールを開発するためのモダンなテンプレート�
 
 ## クイックスタート
 
-### テンプレートの使用
+### 方法1: DevContainer環境（推奨）
+
+DevContainer環境を使用すると、Docker経由で一貫性のある開発環境を即座に構築できます。
+
+#### 必要な環境
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Remote - Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+#### セットアップ手順
+
+1. リポジトリをクローン
+```bash
+git clone https://github.com/ktny/ts-cli-template.git my-cli-tool
+cd my-cli-tool
+```
+
+2. VS Codeでフォルダを開く
+```bash
+code .
+```
+
+3. DevContainerで再オープン
+- VS Codeが自動的にDevContainer設定を検出します
+- 右下に表示される「Reopen in Container」をクリック
+- または、コマンドパレット（`Ctrl+Shift+P`）から「Remote-Containers: Reopen in Container」を実行
+
+4. コンテナの初期化を待つ
+- 初回は数分かかる場合があります
+- 自動的に`npm install`が実行されます
+
+5. 開発開始
+```bash
+# コンテナ内で直接実行可能
+npm run dev
+```
+
+#### DevContainer環境の特徴
+- **Node.js 20**: ES2024機能をサポート
+- **開発ツール**: ZSH、mise、fzf、ripgrep等が事前インストール
+- **VS Code拡張機能**: TypeScript、ESLint、Prettier、GitLens等が自動インストール
+- **設定の統一**: フォーマット、リント設定が自動適用
+- **履歴の永続化**: bash/zsh履歴が保持されます
+
+### 方法2: ローカル環境セットアップ
+
+#### テンプレートの使用
 
 1. このリポジトリをテンプレートとして新しいリポジトリを作成
 

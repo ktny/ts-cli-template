@@ -1,0 +1,89 @@
+{
+  "name": "TypeScript CLI Template",
+  "dockerFile": "Dockerfile",
+  "context": "..",
+  
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      // Set default container specific settings.json values on container create.
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        },
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "typescript.updateImportsOnFileMove.enabled": "always",
+        "files.eol": "\n",
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true
+      },
+      
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": [
+        // TypeScript and JavaScript
+        "ms-vscode.vscode-typescript-next",
+        
+        // ESLint and Prettier
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        
+        // Git and GitLens
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github",
+        
+        // React and JSX (for React Ink components)
+        "ms-vscode.vscode-js-debug",
+        
+        // IntelliCode
+        "visualstudioexptteam.vscodeintellicode",
+        
+        // Path intellisense
+        "christian-kohler.path-intellisense",
+        
+        // npm intellisense
+        "christian-kohler.npm-intellisense",
+        
+        // Error lens for better error visibility
+        "usernamehw.errorlens",
+        
+        // Import cost (helps with bundle size awareness)
+        "wix.vscode-import-cost",
+        
+        // Auto import - ES6, TS, JSX, TSX
+        "steoates.autoimport-es6-ts",
+        
+        // Better comments
+        "aaron-bond.better-comments"
+      ]
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [3000, 8080],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "npm install",
+
+  // Configure tool-specific properties.
+  "mounts": [
+    // Mount bash history
+    "source=ts-cli-template-bashhistory,target=/home/node/.bash_history,type=volume",
+    // Mount zsh history  
+    "source=ts-cli-template-zshhistory,target=/home/node/.zsh_history,type=volume",
+    // Mount ssh keys (if available)
+    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"
+  ],
+
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  "remoteUser": "node",
+
+  // Keep container running
+  "shutdownAction": "none"
+}
