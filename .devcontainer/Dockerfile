@@ -1,27 +1,27 @@
 # Use Node.js 20 slim bookworm as base image
 FROM node:20-slim-bookworm
 
-# Install essential packages for slim version
-RUN apt update \
-    && apt install -y --no-install-recommends \
+# Install essential packages categorized by purpose
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        # Basic system utilities
         less \
-        git \
         procps \
-        sudo \
         unzip \
-        gh \
-        zsh \
-        man-db \
+        # Network & security essentials
         curl \
-        iptables \
-        ipset \
-        iproute2 \
-        dnsutils \
-        aggregate \
         ca-certificates \
+        # Development & version control
+        git \
+        gh \
+        # Shell & productivity tools
+        zsh \
         fzf \
         ripgrep \
-        jq
+        jq \
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Oh My Zsh for the node user
 USER node
