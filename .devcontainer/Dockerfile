@@ -44,6 +44,10 @@ RUN npm install -g \
         eslint \
     && npm cache clean --force
 
+# Install Claude CLI
+USER root
+RUN npm install -g @anthropic-ai/claude-code
+
 # Configure zsh as default shell for node user
 USER root
 RUN chsh -s $(which zsh) node

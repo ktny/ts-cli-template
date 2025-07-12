@@ -77,9 +77,14 @@
     "source=ts-cli-template-bashhistory,target=/home/node/.bash_history,type=volume",
     // Mount zsh history  
     "source=ts-cli-template-zshhistory,target=/home/node/.zsh_history,type=volume",
-    // Mount ssh keys (if available)
-    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"
+    // Mount Claude CLI configuration volume
+    "source=ts-cli-template-claude-config,target=/home/node/.anthropic,type=volume"
   ],
+
+  // Environment variables
+  "remoteEnv": {
+    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
+  },
 
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   "remoteUser": "node",
