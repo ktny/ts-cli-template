@@ -1,62 +1,78 @@
-# Use Node.js 20 slim bookworm as base image
-FROM node:20-slim-bookworm
+FROM node:20
 
-# Install essential packages categorized by purpose
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        # Basic system utilities
-        less \
-        procps \
-        unzip \
-        # Network & security essentials
-        curl \
-        ca-certificates \
-        # Development & version control
-        git \
-        gh \
-        # Shell & productivity tools
-        zsh \
-        fzf \
-        ripgrep \
-        jq \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+ARG TZ
+ENV TZ="$TZ"
 
-# Install Oh My Zsh for the node user
-USER node
-RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended \
-    && echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+# Install basic development tools and iptables/ipset
+RUN apt update && apt install -y less \
+  git \
+  procps \
+  sudo \
+  fzf \
+  zsh \
+  man-db \
+  unzip \
+  gnupg2 \
+  gh \
+  iptables \
+  ipset \
+  iproute2 \
+  dnsutils \
+  aggregate \
+  jq
 
-# Install mise for Node.js version management
-RUN curl https://mise.run | sh \
-    && echo 'eval "$(/home/node/.local/bin/mise activate zsh)"' >> ~/.zshrc \
-    && echo 'eval "$(/home/node/.local/bin/mise activate bash)"' >> ~/.bashrc
+# Ensure default node user has access to /usr/local/share
+RUN mkdir -p /usr/local/share/npm-global && \
+  chown -R node:node /usr/local/share
 
-# Set up development environment
-RUN mkdir -p /home/node/.vscode-server/extensions \
-    && mkdir -p /home/node/.vscode-server-insiders/extensions
+ARG USERNAME=node
 
+# Persist bash history.
+RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+  && mkdir /commandhistory \
+  && touch /commandhistory/.bash_history \
+  && chown -R $USERNAME /commandhistory
 
-# Configure zsh as default shell for node user
-USER root
-RUN chsh -s $(which zsh) node
-USER node
+# Set `DEVCONTAINER` environment variable to help with orientation
+ENV DEVCONTAINER=true
 
-# Set working directory
+# Create workspace and config directories and set permissions
+RUN mkdir -p /workspace /home/node/.claude && \
+  chown -R node:node /workspace /home/node/.claude
+
 WORKDIR /workspace
 
-# Copy package files for dependency installation
-COPY package*.json ./
-RUN chown -R node:node /workspace
+RUN ARCH=$(dpkg --print-architecture) && \
+  wget "https://github.com/dandavison/delta/releases/download/0.18.2/git-delta_0.18.2_${ARCH}.deb" && \
+  sudo dpkg -i "git-delta_0.18.2_${ARCH}.deb" && \
+  rm "git-delta_0.18.2_${ARCH}.deb"
 
-# Install project dependencies as node user
+# Set up non-root user
 USER node
-RUN npm ci --only=production
 
-# Switch back to root for final setup
+# Install global packages
+ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
+ENV PATH=$PATH:/usr/local/share/npm-global/bin
+
+# Set the default shell to zsh rather than sh
+ENV SHELL=/bin/zsh
+
+# Default powerline10k theme
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.2.0/zsh-in-docker.sh)" -- \
+  -p git \
+  -p fzf \
+  -a "source /usr/share/doc/fzf/examples/key-bindings.zsh" \
+  -a "source /usr/share/doc/fzf/examples/completion.zsh" \
+  -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+  -x
+
+# Install Claude
+RUN npm install -g @anthropic-ai/claude-code
+
+# Copy and set up firewall script
+COPY init-firewall.sh /usr/local/bin/
 USER root
-
-# Default to zsh
-SHELL ["/bin/zsh", "-c"]
-CMD ["/bin/zsh"]
+RUN chmod +x /usr/local/bin/init-firewall.sh && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
+  chmod 0440 /etc/sudoers.d/node-firewall
+USER node

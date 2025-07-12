@@ -1,94 +1,52 @@
 {
-  "name": "TypeScript CLI Template",
-  "dockerFile": "Dockerfile",
-  "context": "..",
-
-  // Configure tool-specific properties.
+  "name": "Claude Code Sandbox",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "TZ": "${localEnv:TZ:America/Los_Angeles}"
+    }
+  },
+  "runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW"
+  ],
   "customizations": {
     "vscode": {
-      // Set default container specific settings.json values on container create.
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens"
+      ],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "zsh",
-        "terminal.integrated.profiles.linux": {
-          "zsh": {
-            "path": "/bin/zsh"
-          }
-        },
         "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.codeActionsOnSave": {
           "source.fixAll.eslint": "explicit"
         },
-        "typescript.preferences.importModuleSpecifier": "relative",
-        "typescript.updateImportsOnFileMove.enabled": "always",
-        "files.eol": "\n",
-        "files.insertFinalNewline": true,
-        "files.trimTrailingWhitespace": true
-      },
-
-      // Add the IDs of extensions you want installed when the container is created.
-      "extensions": [
-        // TypeScript and JavaScript
-        "ms-vscode.vscode-typescript-next",
-
-        // ESLint and Prettier
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-
-        // Git and GitLens
-        "eamodio.gitlens",
-        "github.vscode-pull-request-github",
-
-        // React and JSX (for React Ink components)
-        "ms-vscode.vscode-js-debug",
-
-        // IntelliCode
-        "visualstudioexptteam.vscodeintellicode",
-
-        // Path intellisense
-        "christian-kohler.path-intellisense",
-
-        // npm intellisense
-        "christian-kohler.npm-intellisense",
-
-        // Error lens for better error visibility
-        "usernamehw.errorlens",
-
-        // Import cost (helps with bundle size awareness)
-        "wix.vscode-import-cost",
-
-        // Auto import - ES6, TS, JSX, TSX
-        "steoates.autoimport-es6-ts",
-
-        // Better comments
-        "aaron-bond.better-comments"
-      ]
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+          },
+          "zsh": {
+            "path": "zsh"
+          }
+        }
+      }
     }
   },
-
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [3000, 8080],
-
-  // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm install --include=dev && npm install -g @anthropic-ai/claude-code",
-
-  // Configure tool-specific properties.
-  "mounts": [
-    // Mount bash history
-    "source=ts-cli-template-bashhistory,target=/home/node/.bash_history,type=volume",
-    // Mount zsh history
-    "source=ts-cli-template-zshhistory,target=/home/node/.zsh_history,type=volume",
-    // Mount Claude CLI configuration volume
-    "source=ts-cli-template-claude-config,target=/home/node/.anthropic,type=volume"
-  ],
-
-  // Environment variables
-  "remoteEnv": {
-    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
-  },
-
-  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   "remoteUser": "node",
-
-  // Keep container running
-  "shutdownAction": "none"
+  "mounts": [
+    "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
+    "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume"
+  ],
+  "remoteEnv": {
+    "NODE_OPTIONS": "--max-old-space-size=4096",
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude",
+    "POWERLEVEL9K_DISABLE_GITSTATUS": "true"
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "sudo /usr/local/bin/init-firewall.sh"
 }
