@@ -2,20 +2,26 @@
 FROM node:20-slim-bookworm
 
 # Install essential packages for slim version
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends \
+RUN apt update \
+    && apt install -y --no-install-recommends \
+        less \
         git \
-        zsh \
-        curl \
-        ca-certificates \
         procps \
+        sudo \
+        unzip \
+        gh \
+        zsh \
+        man-db \
+        curl \
+        iptables \
+        ipset \
+        iproute2 \
+        dnsutils \
+        aggregate \
+        ca-certificates \
         fzf \
         ripgrep \
-        jq \
-        tree \
-        neovim \
-    && apt-get autoremove -y && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+        jq
 
 # Install Oh My Zsh for the node user
 USER node
