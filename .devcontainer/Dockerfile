@@ -34,20 +34,6 @@ RUN curl https://mise.run | sh \
 RUN mkdir -p /home/node/.vscode-server/extensions \
     && mkdir -p /home/node/.vscode-server-insiders/extensions
 
-# Install global npm packages useful for TypeScript CLI development
-USER root
-RUN npm install -g \
-        typescript \
-        ts-node \
-        tsx \
-        nodemon \
-        prettier \
-        eslint \
-    && npm cache clean --force
-
-# Install Claude CLI
-USER root
-RUN npm install -g @anthropic-ai/claude-code
 
 # Configure zsh as default shell for node user
 USER root
