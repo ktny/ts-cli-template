@@ -1,7 +1,7 @@
-# Use Node.js 20 as base image
-FROM node:20-bullseye
+# Use Node.js 20 slim bookworm as base image
+FROM node:20-slim-bookworm
 
-# Install essential packages
+# Install essential packages for slim version
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
         git \
@@ -11,13 +11,14 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         unzip \
         ca-certificates \
         gnupg \
-        lsb-release \
+        procps \
         fzf \
         ripgrep \
         jq \
         tree \
         neovim \
-    && apt-get autoremove -y && apt-get clean -y
+    && apt-get autoremove -y && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Oh My Zsh for the node user
 USER node
@@ -56,10 +57,16 @@ USER node
 # Set working directory
 WORKDIR /workspace
 
-# Ensure proper permissions
-USER root
+# Copy package files for dependency installation
+COPY package*.json ./
 RUN chown -R node:node /workspace
+
+# Install project dependencies as node user
 USER node
+RUN npm ci --only=production
+
+# Switch back to root for final setup
+USER root
 
 # Default to zsh
 SHELL ["/bin/zsh", "-c"]
