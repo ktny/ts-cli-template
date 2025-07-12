@@ -7,10 +7,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         git \
         zsh \
         curl \
-        wget \
-        unzip \
         ca-certificates \
-        gnupg \
         procps \
         fzf \
         ripgrep \
