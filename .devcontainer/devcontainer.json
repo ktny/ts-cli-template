@@ -69,7 +69,7 @@
   "forwardPorts": [3000, 8080],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm install --include=dev && npm install -g @anthropic-ai/claude-code ts-node nodemon prettier eslint",
+  "postCreateCommand": "npm install --include=dev && npm install -g @anthropic-ai/claude-code",
 
   // Configure tool-specific properties.
   "mounts": [
